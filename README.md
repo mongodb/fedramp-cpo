@@ -4,10 +4,12 @@ Maintain the FedRAMP **Certification Package Overview (CPO)** as Markdown. On me
 
 | Path | Purpose |
 | --- | --- |
+| `cpo/template.md` | Standard blank-ish template with every schema field, `(required)` markers, and allowed values. Copy it to start; CI keeps it schema-valid. |
 | `cpo/cpo.md` | **Edit this.** YAML frontmatter holds structured fields; the Markdown body is the service description. |
 | `cpo/cpo.json` | Generated. Do not edit by hand. |
 | `schema/` | Vendored FedRAMP schemas (`2026-06-24`) that `cpo.json` is validated against. |
 | `scripts/build_cpo.py` | Markdown → JSON converter and validator. |
+| `scripts/check_schema.py` | Confirms `schema/` matches what fedramp.gov publishes and that FedRAMP's rules still reference the pinned CPO schema version. |
 | `.github/workflows/build-cpo-json.yml` | PRs: validate. Push to `main`: validate, regenerate, commit `cpo/cpo.json`. |
 
 ## Format
@@ -25,10 +27,15 @@ Empty strings are dropped from the output, so optional fields can be left blank.
 
 ```sh
 make build   # validate and regenerate cpo/cpo.json
-make check   # validate only
+make check   # validate cpo.md and the template only
+make check-schema   # compare vendored schemas to fedramp.gov
 ```
 
 **On GitHub:** Actions → *Build CPO JSON* → *Run workflow*, pick a branch, and leave *commit* checked to push the regenerated `cpo.json` to that branch, or uncheck it to only validate.
+
+## Which schema is used
+
+`cpo.json` is validated against the FedRAMP Certification Package Overview schema dated `2026-06-24` (the version referenced by FedRAMP's official `fedramp-consolidated-rules.json`) and records it in a top-level `$schema` property. The *Check FedRAMP schema* workflow runs weekly and on schema changes, and fails if the vendored copies drift from fedramp.gov or FedRAMP moves to a newer version.
 
 ## Upgrading the schema
 

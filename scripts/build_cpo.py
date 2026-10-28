@@ -45,13 +45,15 @@ def build(src: Path) -> dict:
     if body:
         data.setdefault("serviceIdentification", {})["serviceDescription"] = body
 
-    rel = str(src.relative_to(ROOT))
+    rel = str(src.relative_to(ROOT)) if src.is_relative_to(ROOT) else src.name
     try:
         updated = git("log", "-1", "--format=%cI", "--", rel)
         sha = git("log", "-1", "--format=%H", "--", rel)
     except subprocess.CalledProcessError:
         updated, sha = "", ""
     # CPO-CSO-MTD: version, date/time of last update, source of update, responsible official
+    schema_id = json.loads((SCHEMA_DIR / CPO_SCHEMA).read_text())["$id"]
+    data["$schema"] = schema_id  # records which schema version this document was validated against
     data["metadata"] = {
         "version": meta.get("version"),
         "lastUpdated": updated,
@@ -80,10 +82,11 @@ def validate(doc: dict) -> list[str]:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--src", default=ROOT / "cpo/cpo.md", type=Path)
+    ap.add_argument("--src", default=ROOT / "cpo/cpo.md", type=Path, help="markdown source (default: cpo/cpo.md)")
     ap.add_argument("--out", default=ROOT / "cpo/cpo.json", type=Path)
     ap.add_argument("--check", action="store_true", help="validate only; do not write output")
     args = ap.parse_args()
+    args.src, args.out = args.src.resolve(), args.out.resolve()
 
     doc = build(args.src)
     errs = validate(doc)
@@ -91,7 +94,7 @@ def main() -> None:
         print("CPO validation failed:", *errs, sep="\n  - ", file=sys.stderr)
         sys.exit(1)
     if args.check:
-        print("cpo.md is valid")
+        print(f"{args.src.name} is valid")
         return
     args.out.write_text(json.dumps(doc, indent=2, ensure_ascii=False) + "\n")
     print(f"wrote {args.out.relative_to(ROOT)}")

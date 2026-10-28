@@ -3,11 +3,11 @@ name: Build CPO JSON
 on:
   # PRs: validate only, so schema errors are caught before merge
   pull_request:
-    paths: ["cpo/cpo.md", "schema/**", "scripts/**"]
+    paths: ["cpo/*.md", "schema/**", "scripts/**"]
   # main: validate, regenerate cpo/cpo.json, and commit it back
   push:
     branches: [main]
-    paths: ["cpo/cpo.md", "schema/**", "scripts/**"]
+    paths: ["cpo/*.md", "schema/**", "scripts/**"]
   # Manual run from the Actions tab; uncheck "commit" to validate only
   workflow_dispatch:
     inputs:
@@ -34,6 +34,9 @@ jobs:
           cache-dependency-path: scripts/requirements.txt
 
       - run: pip install -r scripts/requirements.txt
+
+      - name: Validate template
+        run: python scripts/build_cpo.py --src cpo/template.md --check
 
       - name: Build and validate cpo.json
         run: python scripts/build_cpo.py
