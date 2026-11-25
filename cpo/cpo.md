@@ -14,73 +14,101 @@
 metadata:                          # (required) CPO-CSO-MTD
   version: "0.1.0"
   responsibleOfficial:
-    name: Jane Example
-    title: Chief Information Security Officer
-    email: jane.example@example.com
+    name: Valentina Poghosyan
+    title: Chief Compliance Officer
+    email: valentina.poghosyan@mongodb.com
     phone: "+1-555-555-0100"
 
 serviceIdentification:               # (required)
-  fedRampPackageId: EXAMPLE-0000     # (required) FedRAMP ID, or provider name + acronym if none
+  fedRampPackageId: FR2122150307     # (required) FedRAMP ID, or provider name + acronym if none
   ueiNumber: ""                      # SAM.gov UEI; leave blank if none
-  providerName: Example Corp
-  serviceName: Example Cloud Platform
-  serviceAcronym: ECP
-  certificationType: 20x             # 20x | Rev5
-  website: https://www.example.com/ecp
-  logo: https://www.example.com/logo.svg   # must end in png/jpg/gif/svg/webp/ico/bmp/tiff
+  providerName: MongoDB, Inc.
+  serviceName: Atlas for Government
+  serviceAcronym: A4G
+  certificationType: Rev5             # 20x | Rev5
+  website: https://www.mongodb.com/products/platform/atlas-for-government
+  logo: https://raw.githubusercontent.com/mongodb/fedramp-cpo/refs/heads/main/MDB-A4G-Logo.png   # must end in png/jpg/gif/svg/webp/ico/bmp/tiff
 
 serviceProperties:                    # (required)
-  serviceType: [SaaS]                # (required) SaaS | PaaS | IaaS
-  deploymentModel: Public Cloud      # (required) Public Cloud | Government-Only Cloud | Hybrid Cloud | Community Cloud | Government Community Cloud
+  serviceType: [PaaS]                # (required) SaaS | PaaS | IaaS
+  deploymentModel: Government Community Cloud      # (required) Public Cloud | Government-Only Cloud | Hybrid Cloud | Community Cloud | Government Community Cloud
   businessCategory:                  # 1-10 values from the schema enum
     - Data Management
+    - Analytics
+    - Storage
   trustCenter:
     repositoryType: [Trust Center]
-    url: https://trust.example.com
+    url: https://trust.mongodb.com/
     repositoryDescription: Public trust center with policies and compliance reports.
-    authenticationRequired: false
+    authenticationRequired: true
+    accessRequestInstructions: You must have a MongoDB Atlas for Government (A4G) account to request access or have been invited to our trust portal to access FedRAMP package details. Please contact fedramp@mongodb.com if you need access.
   secureConfigurationGuidance:
     repositoryType: [Secure Configuration Guidance]
-    url: https://docs.example.com/secure-config
+    url: https://www.mongodb.com/docs/atlas/government/security/
     repositoryDescription: Secure configuration guide for agency customers.
-    authenticationRequired: true
-    accessRequestInstructions: Email fedramp@example.com to request access.
+    authenticationRequired: false
+    accessRequestInstructions: Email fedramp@mongodb.com to request access.
   nextOngoingCertificationReportDate: 2027-01-01
 
 # Must include at least one Security and one Sales contact (CDS-CSO-PUB).
 contactInformation:                  # (required)
   - contactType: Security
     contactName: Security Team
-    contactEmail: security@example.com
-    contactPhone: "+1-555-555-0101"
+    contactEmail: security@mongodb.com
+    contactPhone: "+1-866-237-8815"
   - contactType: Sales
     contactName: Gov Sales
-    contactEmail: gov-sales@example.com
-    contactPhone: "+1-555-555-0102"
+    contactEmail: fedramp@mongodb.com
+    contactPhone: "+1-866-237-8815"
 
 assessor:
-  name: Example Assessor LLC
-  assessorID: "123456"               # six digits
-
-advisors:
-  - name: Example Advisory Group
+  name: Schellman Compliance, LLC
+  assessorID: "136571"               # six digits
 
 certifiedServices:
-  - serviceName: Example Core
+  - serviceName: MongoDB Atlas
     serviceDescription: Core platform included in the certification boundary.
     dateAvailable: 2026-07-04
 
 thirdPartyInformationResources:
   certified:
-    - fedRampCertifiedThirdPartyInformationResource: Example IaaS Provider
-      useCase: Hosts production workloads.
+    - fedRampCertifiedThirdPartyInformationResource: AWS GovCloud
+      useCase: Hosts production MongoDB database clusters (Class D/High impact level)
+    - fedRampCertifiedThirdPartyInformationResource: AWS US East/West
+      useCase: Hosts production MongoDB database clusters (Class C/Moderate impact level)
+    - fedRampCertifiedThirdPartyInformationResource: Azure Government (includes Dynamics 365)
+      useCase: Hosts production MongoDB database clusters (Class D/High impact level)
+    - fedRampCertifiedThirdPartyInformationResource: Google Services (Google Cloud Platform Products and underlying Infrastructure)
+      useCase: Hosts production MongoDB database clusters (Class D/High impact level)
+    - fedRampCertifiedThirdPartyInformationResource: Okta IDaaS Regulated Cloud
+      useCase: Customer authentication and sign-in
+    - fedRampCertifiedThirdPartyInformationResource: Salesforce Government Cloud Plus
+      useCase: Customer support ticketing
+    - fedRampCertifiedThirdPartyInformationResource: Slack
+      useCase: Customer support and internal operations
+    - fedRampCertifiedThirdPartyInformationResource: Google Workspace
+      useCase: Internal operations
+    - fedRampCertifiedThirdPartyInformationResource: GitHub Enterprise Cloud
+      useCase: Software source code
+    - fedRampCertifiedThirdPartyInformationResource: PagerDuty Operations Cloud
+      useCase: On-call alerting
   nonCertified:
-    - name: Example Email Service
-      provider: Example Mail Inc.
-      website: https://mail.example.com
-      useCase: Sends transactional notifications; no federal data stored.
+    - name: Let's Encrypt
+      provider: Internet Security Research Group
+      website: https://letsencrypt.org/
+      useCase: Trusted TLS certificates
+    - name: Sentry
+      provider: Functional Software, Inc.
+      website: https://sentry.io/
+      useCase: Stack trace and error debugging
+    - name: SAP SuccessFactors
+      provider: SAP SE
+      website: https://www.sap.com/products/hcm.html
+      useCase: Internal human resources operations
 ---
 
-Example Cloud Platform is a SaaS offering that ... (EXAMPLE). Write the service
-description here in plain Markdown. Everything below the frontmatter is published
-as `serviceDescription`.
+MongoDB Atlas for Government is a fully managed Platform as a Service (PaaS) trusted by U.S. federal, state, and local governments, including Criminal Justice Information Solutions (CJIS) applications, and the Independent Software Vendors (ISVs) that support them. Atlas for Government provisions, operates, monitors, backs up, and scales MongoDB database clusters on the customer’s behalf in a secure, scalable environment.
+
+Atlas for Government integrates a suite of data and application services under a unified customer experience to provision and manage clusters through a simplified user interface. The services within the FedRAMP authorization boundary include Managed MongoDB database clusters, Atlas Search, time series collections, backup and restore, monitoring and alerting, and the Atlas UI, Administration API, and CLI. Altogether these services support transactional workloads, time series data, search, and petabyte-scale data storage.
+
+Data is encrypted in transit using TLS and at rest using FIPS 140-validated encryption, with support for customer-managed keys. MongoDB supports Client-Side Field Level Encryption and Queryable Encryption, which encrypt sensitive fields in customer applications before reaching Atlas for Government. Customer database clusters are deployed in AWS GovCloud (US) regions, AWS U.S. East/West regions, GCP Assured Workloads U.S. regions, and now Microsoft Azure Government for a truly multi-cloud management platform.
