@@ -59,9 +59,9 @@
   },
   "certifiedServices": [
     {
-      "serviceName": "MongoDB Atlas (Class D Certified)",
+      "serviceName": "MongoDB Atlas",
       "serviceDescription": "Core platform included in the certification boundary.",
-      "dateAvailable": "2026-11-17"
+      "dateAvailable": "2026-07-04"
     }
   ],
   "thirdPartyInformationResources": {
@@ -131,10 +131,10 @@
   "$schema": "https://fedramp.gov/schemas/fedramp-certification-package-overview-schema-2026-06-24.json",
   "metadata": {
     "version": "0.1.0",
-    "lastUpdated": "2026-10-28T14:35:55-04:00",
+    "lastUpdated": "2026-11-25T09:59:53-05:00",
     "updateSource": {
       "file": "cpo/cpo.md",
-      "commit": "50eadacd9053a1c41ca00fbcb3ac1c205a3892c5"
+      "commit": "5be972c851e63d5894411fecadb3b8a363017783"
     },
     "responsibleOfficial": {
       "name": "Valentina Poghosyan",
