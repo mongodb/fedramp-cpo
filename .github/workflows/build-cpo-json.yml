@@ -1,0 +1,54 @@
+name: Build CPO JSON
+
+on:
+  # PRs: validate only, so schema errors are caught before merge
+  pull_request:
+    paths: ["cpo/*.md", "schema/**", "scripts/**"]
+  # main: validate, regenerate cpo/cpo.json, and commit it back
+  push:
+    branches: [main]
+    paths: ["cpo/*.md", "schema/**", "scripts/**"]
+  # Manual run from the Actions tab; uncheck "commit" to validate only
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: Commit the regenerated cpo/cpo.json to the selected branch
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # needed so git log can find the last commit touching cpo.md
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: scripts/requirements.txt
+
+      - run: pip install -r scripts/requirements.txt
+
+      - name: Validate template
+        run: python scripts/build_cpo.py --src cpo/template.md --check
+
+      - name: Build and validate cpo.json
+        run: python scripts/build_cpo.py
+
+      - name: Commit cpo.json
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.commit)
+        run: |
+          if git diff --quiet -- cpo/cpo.json && [ -z "$(git ls-files --others --exclude-standard cpo/cpo.json)" ]; then
+            echo "cpo.json unchanged"; exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add cpo/cpo.json
+          git commit -m "chore: regenerate cpo.json [skip ci]"
+          git push

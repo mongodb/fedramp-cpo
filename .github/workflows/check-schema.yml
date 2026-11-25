@@ -1,0 +1,23 @@
+name: Check FedRAMP schema
+
+# Confirms the vendored schemas in schema/ are still the ones FedRAMP publishes
+# and that the official rules still point at the pinned CPO schema version.
+on:
+  pull_request:
+    paths: ["schema/**", "scripts/check_schema.py"]
+  schedule:
+    - cron: "0 14 * * 1"   # Mondays 14:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python scripts/check_schema.py
